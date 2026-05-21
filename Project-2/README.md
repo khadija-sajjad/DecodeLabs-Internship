@@ -16,3 +16,15 @@ Python | Pandas | OpenPyXL | Excel
 - EDA_code.py — Main analysis script
 - EDA_Summary.xlsx — Statistical summary
 - Cleaned_Data.xlsx — Processed dataset
+## 🔍 Key Observations & Insights
+
+| Insight | Detail |
+|---------|--------|
+| 🚨 High Cancellation Rate | 20.83% orders (250) cancelled — highest single status |
+| 🖨️ Printer = Top Seller | 181 orders & highest revenue (195,612) |
+| 💳 Online Payments Dominate | 21.5% orders online — all 5 methods ~20% each |
+| 📱 Instagram = Top Referral | 21.6% traffic (259 orders) — ahead of Email & Google |
+| ⚠️ Coupon Data Incomplete | 309 orders (25.75%) missing coupon codes |
+| 📈 Right-Skewed Pricing | Mean (1,053) > Median (823) — high-value outliers |
+| 🔎 Outliers Detected | 8 orders exceed 3,300 — likely VIP bulk orders |
+| 📵 Phone = Lowest Revenue | 151,722 total despite being popular category |
