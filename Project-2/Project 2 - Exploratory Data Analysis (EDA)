@@ -1,0 +1,96 @@
+import pandas as pd
+import os
+from openpyxl import load_workbook
+#step 1 data load
+df = pd.read_excel('Cleaned_Data.xlsx')
+#step 2 mean, median, count
+total_orders    = len(df)
+mean_price      = df['TotalPrice'].mean()
+median_price    = df['TotalPrice'].median()
+mean_quantity   = df['Quantity'].mean()
+median_quantity = df['Quantity'].median()
+print(f"Total order     : {total_orders}")
+print(f"Mean Price      : {mean_price:.2f}")
+print(f"Median Price    : {median_price:.2f}")
+print(f"Mean Quantity   : {mean_quantity:.2f}")
+print(f"Median Quantity : {median_quantity:.2f}")
+#step 3 Standard Deviation 
+std_price    = df['TotalPrice'].std()
+std_quantity = df['Quantity'].std()
+print(f"Std Dev Price   : {std_price:.2f}")
+print(f"Std Dev Quantity: {std_quantity:.2f}")
+#step 4 IQR Outlier Detection
+Q1          = df['TotalPrice'].quantile(0.25)
+Q3          = df['TotalPrice'].quantile(0.75)
+IQR         = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = df[
+    (df['TotalPrice'] < lower_bound) |
+    (df['TotalPrice'] > upper_bound)
+]
+print(f"Total Outliers  : {len(outliers)}")
+# summary table 
+summary = pd.DataFrame({
+    'Metric': [
+        'Total Orders',
+        'Mean Price',
+        'Median Price',
+        'Mean Quantity',
+        'Median Quantity',
+        'Std Dev Price',
+        'Std Dev Quantity',
+        'IQR (TotalPrice)',
+        'Outlier Lower Bound',
+        'Outlier Upper Bound',
+        'Total Outliers',
+    ],
+    'Value': [
+        total_orders,
+        round(mean_price, 2),
+        round(median_price, 2),
+        round(mean_quantity, 2),
+        round(median_quantity, 2),
+        round(std_price, 2),
+        round(std_quantity, 2),
+        round(IQR, 2),
+        round(lower_bound, 2),
+        round(upper_bound, 2),
+        len(outliers),
+    ]
+})
+if os.path.exists('EDA_Summary.xlsx'):
+    book = load_workbook('EDA_Summary.xlsx')
+    with pd.ExcelWriter(
+    'EDA_Summary.xlsx',
+    engine='openpyxl',
+    mode='a',
+    if_sheet_exists='overlay'
+) as writer:
+        summary.to_excel(writer, sheet_name='EDA_Summary', index=False)
+        outliers.to_excel(writer, sheet_name='Outliers', index=False)
+else:
+    with pd.ExcelWriter('EDA_Summary.xlsx', engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name='Cleaned_Data', index=False)
+        summary.to_excel(writer, sheet_name='EDA_Summary', index=False)
+        outliers.to_excel(writer, sheet_name='Outliers', index=False)
+
+from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
+
+wb = load_workbook('EDA_Summary.xlsx')
+style = TableStyleInfo(
+    name="TableStyleMedium9",
+    showFirstColumn=False,
+    showLastColumn=False,
+    showRowStripes=True,
+    showColumnStripes=False
+)
+# Cleaned_Data table
+ws0 = wb['Cleaned_Data']
+# Pehle existing tables remove karo
+ws0._tables.clear()
+last_col0 = get_column_letter(ws0.max_column)
+tab0 = Table(displayName="CleanedTable", ref=f"A1:{last_col0}{ws0.max_row}")
+tab0.tableStyleInfo = style
+ws0.add_table(tab0)
