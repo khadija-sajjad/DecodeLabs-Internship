@@ -10,8 +10,8 @@
 |---|---------|-------|
 | 1 | [Project-1 - Data Cleaning](./Project-1) | Cleaned 1200 orders using Python & Pandas |
 | 2 | [Project-2 - EDA Analysis](./Project-2) | Statistical Analysis & Outlier Detection |
-
+| 3 | [Project-3 - SQL Analysis](./project 3) | SQL Queries & Business Insights |
 ---
 
 ## 🛠️ Tools Used
-Python | Pandas | Excel | GitHub
+Python | Pandas | MySQL | Excel | GitHub
