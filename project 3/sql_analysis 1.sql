@@ -20,7 +20,6 @@ ORDER BY Total_Orders DESC;
 SELECT PaymentMethod,
        COUNT(*) AS Total_Orders
  FROM cleaned_data
- Where PamentMethod = 'COD'
  GROUP BY PaymentMethod
  ORDER BY Total_Orders DESC;
 --  Order Status
